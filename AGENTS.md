@@ -31,3 +31,5 @@ use the editor.
 
 ## Imported website
 - Keep the imported page and its interactions in its route file, with downloaded media served locally and captured styles retained for visual fidelity.
+- Adapt the imported layouts through a scoped override stylesheet loaded after captured CSS, keeping the source archive intact for reference.
+- Keep unconfirmed business configuration and catalog entries in a browser-safe content module; contact links must validate official data and never fall back to source-site details.

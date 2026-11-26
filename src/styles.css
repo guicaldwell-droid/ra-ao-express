@@ -268,3 +268,36 @@
   --tracking-widest: .1em;
 }
 /* site-import tokens: end */
+
+/* Brand roles override the source palette without changing its archived CSS. */
+:root, .dark {
+  --background: oklch(0.99 0.003 85);
+  --foreground: oklch(0.2 0.007 30);
+  --primary: oklch(0.55 0.215 27);
+  --primary-hover: oklch(0.47 0.19 27);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.95 0.025 80);
+  --secondary-foreground: var(--foreground);
+  --accent: oklch(0.83 0.135 78);
+  --accent-foreground: var(--foreground);
+  --muted: oklch(0.96 0.008 75);
+  --muted-foreground: oklch(0.46 0.015 35);
+  --border: oklch(0.87 0.01 75);
+  --ring: var(--primary);
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+  --radius: 0.5rem;
+  --express-soft: oklch(0.94 0.035 27);
+  --express-warm: oklch(0.93 0.065 80);
+  --express-dark: oklch(0.19 0.01 30);
+}
+@theme inline {
+  --color-primary-hover: var(--primary-hover);
+  --color-express-soft: var(--express-soft);
+  --color-express-warm: var(--express-warm);
+  --color-express-dark: var(--express-dark);
+  --font-sans: "Karla", sans-serif;
+  --font-display: "Bricolage Grotesque", sans-serif;
+}
