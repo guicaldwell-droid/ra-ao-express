@@ -1,0 +1,172 @@
+/* Adapted source layouts; brand colors always resolve through semantic roles. */
+html { scroll-behavior: smooth; scroll-padding-top: 104px; }
+body:has(.racao-site) { background: var(--background); color: var(--foreground); font-family: "Karla", sans-serif; }
+.racao-site { --cream: var(--background); --cream2: var(--secondary); --deep: var(--foreground); --ink: var(--foreground); --line: var(--border); --display: "Bricolage Grotesque", sans-serif; --body: "Karla", sans-serif; --lime: var(--accent); --green: var(--primary); --green2: var(--primary); --orange: var(--accent); letter-spacing: 0; }
+.racao-site * { letter-spacing: 0; }
+.racao-site a:focus-visible, .racao-site button:focus-visible, .racao-site summary:focus-visible { outline: 3px solid var(--ring); outline-offset: 5px; }
+.racao-site h1, .racao-site h2, .racao-site h3 { font-family: var(--display); text-transform: none; text-shadow: none; }
+.racao-site h2 { font-size: 52px; font-weight: 800; line-height: 1.04; margin: 0; }
+.racao-site h2 em { color: var(--primary); font-style: normal; }
+.racao-site p { line-height: 1.6; }
+.racao-site .section-pad { padding: 88px max(32px, calc((100% - 1200px)/2)); }
+.racao-site .express-eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; margin: 0 0 24px; }
+.skip-link { position: fixed; top: -100px; left: 16px; z-index: 100; background: var(--background); padding: 12px; }
+.skip-link:focus { top: 16px; }
+.racao-site .topline { background: var(--express-dark); color: var(--primary-foreground); display: flex; align-items: center; justify-content: space-between; padding: 9px max(32px, calc((100% - 1200px)/2)); font-size: 11px; min-height: 34px; }
+.racao-site .site-header { background: var(--background); display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 86px; padding: 16px max(32px, calc((100% - 1200px)/2)); position: sticky; top: 0; z-index: 40; border-bottom: 1px solid var(--border); box-shadow: none; backdrop-filter: none; }
+.racao-site .brand { display: flex; padding: 0; }
+.official-logo-space { min-width: 150px; min-height: 46px; display: flex; align-items: center; justify-content: center; border: 1px dashed var(--border); color: var(--muted-foreground); font: 700 11px var(--body); }
+.racao-site .main-nav { display: flex; align-items: center; gap: 16px; font-size: 14px; }
+.racao-site .nav-link { height: 42px; font-size: 13px; font-weight: 700; padding: 0 10px; }
+.racao-site .nav-link:hover { color: var(--primary); background: var(--muted); }
+.racao-site .nav-cta { padding: 12px 23px; min-height: 44px; margin-left: 12px; }
+.racao-site .express-menu { display: none; }
+.racao-site .hero-showcase { position: relative; isolation: isolate; min-height: 560px; height: min(690px, calc(100svh - 190px)); max-height: 740px; background: var(--background); padding: 50px max(32px, calc((100% - 1200px)/2)); overflow: hidden; display: block; }
+.hero-showcase__heading { position: relative; z-index: 2; max-width: 700px; }
+.racao-site .hero-showcase h1 { color: var(--foreground); font-size: 124px; line-height: .94; font-weight: 800; margin: 0; }
+.racao-site .hero-showcase h1 > span:first-of-type { color: var(--primary); }
+.racao-site .hero-period { color: var(--accent); }
+.racao-site .hero-showcase__dog { position: absolute; height: 86%; width: 52%; max-width: 620px; bottom: 0; right: 4%; left: auto; top: auto; transform: none; object-fit: contain; object-position: center bottom; z-index: 3; filter: none; animation: express-enter 450ms ease-out both; }
+.hero-showcase__copy { position: relative; z-index: 4; margin-top: 28px; max-width: 470px; }
+.racao-site .hero-tagline { font-family: var(--display); font-size: 24px; line-height: 1.15; font-weight: 700; margin: 0 0 12px; }
+.hero-showcase__copy > p:not(.hero-tagline) { font-size: 15px; color: var(--muted-foreground); margin: 0 0 22px; }
+.hero-actions { display: flex; align-items: center; gap: 28px; }
+.hero-actions > a:first-child { min-height: 48px; padding: 12px 28px; font-size: 15px; }
+.hero-photo-caption { position: absolute; right: 7%; bottom: 15px; z-index: 4; font-size: 10px; color: var(--muted-foreground); }
+.racao-site .promise-band { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; background: var(--primary); color: var(--primary-foreground); padding: 22px max(32px, calc((100% - 1200px)/2)); font-size: 11px; font-weight: 700; text-align: center; }
+.racao-site .promise-band span { white-space: normal; }
+.racao-site .choose { background: var(--background); }
+.racao-site .choose__heading, .catalog-heading { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 48px; }
+.racao-site .choose__heading > p, .catalog-heading > p { color: var(--muted-foreground); font-size: 15px; max-width: 330px; margin: 0; }
+.express-categories { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 20px; }
+.express-category { min-width: 0; border-radius: 8px; overflow: hidden; background: var(--express-soft); }
+.express-category--petiscos { background: var(--express-warm); }
+.express-category--acessorios { background: var(--secondary); }
+.express-category--cuidados { background: var(--muted); }
+.racao-site .category-action { position: relative; display: flex; align-items: stretch; justify-content: end; flex-direction: column; height: 310px; width: 100%; padding: 24px; gap: 0; text-align: left; transition: outline-color 150ms ease; }
+.racao-site .category-action:hover { background: transparent; outline: 2px solid var(--primary); outline-offset: -2px; }
+.category-index { position: absolute; top: 20px; left: 24px; font-size: 11px; font-weight: 700; color: var(--muted-foreground); }
+.racao-site .category-action img { position: absolute; width: 95%; height: 70%; top: 12px; right: -8px; object-fit: contain; object-position: right center; }
+.category-name { position: relative; font-family: var(--display); font-size: 24px; font-weight: 800; line-height: 1.1; z-index: 1; }
+.category-caption { position: relative; font-size: 10px; font-weight: 400; color: var(--muted-foreground); margin-top: 10px; }
+.racao-site .catalog { background: var(--secondary); border-top: 1px solid var(--border); }
+.catalog-filters { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+.catalog-filters button { font-size: 13px; min-height: 40px; }
+.catalog-state { font-size: 12px; color: var(--muted-foreground); margin: 24px 0; }
+.product-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 28px; }
+.product-slot { min-width: 0; }
+.product-image-space { aspect-ratio: 1.25; border: 1px dashed var(--border); background: var(--background); display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; color: var(--muted-foreground); font-size: 11px; }
+.product-image-space svg { width: 24px; height: 24px; stroke-width: 1; }
+.slot-label { font-size: 10px; color: var(--muted-foreground); margin-top: 16px; }
+.product-slot h3 { font-size: 20px; margin: 8px 0; }
+.product-slot > p:not(.slot-label) { font-size: 13px; color: var(--muted-foreground); margin: 8px 0; }
+.product-slot .product-price { font-weight: 700; }
+.racao-site .care { background: var(--background); }
+.order-heading { max-width: 750px; margin-bottom: 56px; }
+.order-steps { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 40px; padding: 0; margin: 0; list-style: none; }
+.order-steps li { padding-top: 22px; border-top: 1px solid var(--border); }
+.step-number { color: var(--primary); font-family: var(--display); font-size: 48px; font-weight: 800; }
+.order-steps h3 { font-size: 22px; margin: 18px 0 12px; }
+.order-steps p { font-size: 15px; color: var(--muted-foreground); max-width: 300px; }
+.order-footnote { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 18px; border-top: 1px solid var(--border); margin-top: 44px; padding-top: 24px; font-size: 12px; color: var(--muted-foreground); }
+.racao-site .about { background: var(--express-warm); display: grid; grid-template-columns: .85fr 1.15fr; align-items: center; gap: 80px; }
+.racao-site .about__visual { height: auto; max-width: none; }
+.official-logo-space--large { min-height: 280px; width: 100%; font-size: 13px; border-color: var(--muted-foreground); }
+.racao-site .about__copy { max-width: 580px; }
+.racao-site .about__lead { color: var(--foreground); font-size: 17px; margin: 24px 0 18px; }
+.brand-presentation { color: var(--muted-foreground); font-size: 12px; margin-bottom: 28px; overflow-wrap: anywhere; }
+.racao-site .visit { background: var(--express-dark); color: var(--primary-foreground); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+.racao-site .visit h2 em { color: var(--accent); }
+.racao-site .visit__copy > p:not(.express-eyebrow) { color: var(--primary-foreground); opacity: .8; font-size: 15px; max-width: 380px; margin: 24px 0 30px; }
+.racao-site .visit__details { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin: 0; }
+.visit__details > div { border-top: 1px solid var(--muted-foreground); padding-top: 18px; }
+.visit__details dt { font-size: 11px; opacity: .7; margin-bottom: 12px; }
+.visit__details dd { margin: 0; font-size: 14px; line-height: 1.6; overflow-wrap: anywhere; }
+.visit__details .delivery-detail { grid-column: 1/-1; }
+.racao-site .footer { display: block; padding: 48px max(32px, calc((100% - 1200px)/2)) 28px; background: var(--background); color: var(--foreground); }
+.footer-top { display: grid; grid-template-columns: 1fr 1fr 1.4fr; align-items: center; gap: 32px; padding-bottom: 32px; }
+.footer-top .official-logo-space { max-width: 180px; }
+.footer-top > p { font-size: 14px; font-weight: 700; }
+.footer-top nav { display: flex; flex-wrap: wrap; justify-content: end; gap: 4px; }
+.footer-top nav a { font-size: 12px; }
+.footer-legal { border-top: 1px solid var(--border); padding-top: 24px; display: flex; align-items: start; flex-wrap: wrap; gap: 24px; font-size: 11px; color: var(--muted-foreground); }
+.footer-legal details { max-width: 220px; }
+.footer-legal summary { cursor: pointer; }
+.footer-legal > span { margin-left: auto; }
+.footer-legal > a { margin-top: -10px; }
+@keyframes express-enter { from { opacity: .4; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@media (min-width: 761px) and (max-width: 1100px) {
+  .racao-site .main-nav { gap: 2px; }
+  .racao-site .hero-showcase h1 { font-size: 104px; }
+  .racao-site .hero-showcase__dog { right: -5%; width: 56%; }
+  .express-categories { gap: 12px; }
+  .racao-site .category-action { padding: 18px; height: 275px; }
+  .category-name { font-size: 20px; }
+  .racao-site .about, .racao-site .visit { gap: 40px; }
+}
+@media (max-width: 760px) {
+  html { scroll-padding-top: 90px; }
+  .racao-site .section-pad { padding: 60px 22px; }
+  .racao-site h2 { font-size: 36px; line-height: 1.08; }
+  .racao-site .topline { padding: 8px 22px; font-size: 9px; }
+  .racao-site .site-header { min-height: 76px; padding: 14px 22px; }
+  .official-logo-space { min-width: 130px; min-height: 40px; font-size: 10px; }
+  .racao-site .express-menu { display: inline-flex; color: var(--foreground); }
+  .racao-site .main-nav { visibility: hidden; opacity: 0; pointer-events: none; background: var(--background); border: 1px solid var(--border); border-radius: 8px; box-shadow: none; backdrop-filter: none; position: absolute; inset: 75px 16px auto; display: flex; flex-direction: column; align-items: stretch; padding: 12px; gap: 4px; transform: none; transition: opacity 150ms ease; }
+  .racao-site .main-nav--open { visibility: visible; opacity: 1; pointer-events: auto; }
+  .racao-site .nav-link { justify-content: start; border-bottom: 1px solid var(--border); border-radius: 0; padding: 12px; font-size: 14px; }
+  .racao-site .nav-cta { margin: 8px 0 0; }
+  .racao-site .hero-showcase { height: auto; min-height: 650px; max-height: none; padding: 30px 22px 260px; }
+  .racao-site .hero-showcase .express-eyebrow { font-size: 10px; margin-bottom: 16px; }
+  .racao-site .hero-showcase h1 { font-size: 72px; }
+  .hero-showcase__copy { margin-top: 20px; }
+  .racao-site .hero-tagline { font-size: 21px; }
+  .hero-showcase__copy > p:not(.hero-tagline) { font-size: 14px; margin-bottom: 18px; }
+  .hero-actions { gap: 24px; }
+  .hero-actions > a:first-child { padding: 12px 20px; }
+  .racao-site .hero-showcase__dog { height: 290px; width: 76%; right: 1%; max-width: 340px; z-index: 1; }
+  .hero-photo-caption { right: auto; left: 22px; bottom: 16px; }
+  .racao-site .promise-band { grid-template-columns: 1fr; gap: 12px; padding: 22px; font-size: 10px; }
+  .racao-site .choose__heading, .catalog-heading { display: block; margin-bottom: 32px; }
+  .racao-site .choose__heading > p, .catalog-heading > p { font-size: 14px; margin-top: 20px; }
+  .express-categories { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+  .racao-site .category-action { height: 235px; padding: 16px; }
+  .category-index { left: 16px; top: 16px; }
+  .racao-site .category-action img { height: 64%; width: 98%; right: -8px; top: 18px; }
+  .category-name { font-size: 20px; }
+  .category-caption { font-size: 9px; margin-top: 7px; }
+  .catalog-filters { gap: 4px; }
+  .catalog-filters button { font-size: 11px; padding: 9px 12px; }
+  .product-grid { grid-template-columns: 1fr; gap: 32px; }
+  .product-image-space { aspect-ratio: 1.6; }
+  .order-heading { margin-bottom: 36px; }
+  .order-steps { grid-template-columns: 1fr; gap: 24px; }
+  .order-steps li { display: grid; grid-template-columns: 56px 1fr; column-gap: 16px; }
+  .step-number { grid-row: 1/3; font-size: 36px; }
+  .order-steps h3 { font-size: 20px; margin: 4px 0 8px; }
+  .order-steps p { font-size: 14px; margin: 0; }
+  .order-footnote { align-items: start; flex-direction: column; }
+  .racao-site .about { grid-template-columns: 1fr; gap: 36px; }
+  .official-logo-space--large { min-height: 180px; }
+  .racao-site .about__copy { max-width: none; }
+  .racao-site .visit { grid-template-columns: 1fr; gap: 40px; }
+  .racao-site .visit__details { gap: 28px 16px; }
+  .visit__details dd { font-size: 12px; }
+  .racao-site .footer { padding: 36px 22px 26px; }
+  .footer-top { grid-template-columns: 1fr; gap: 20px; }
+  .footer-top > p { margin: 0; }
+  .footer-top nav { justify-content: start; margin-left: -12px; }
+  .footer-legal { gap: 20px; }
+  .footer-legal > span { margin-left: 0; }
+  .footer-legal > a { margin-left: auto; }
+}
+@media (max-width: 360px) {
+  .racao-site .hero-showcase h1 { font-size: 62px; }
+  .hero-actions { gap: 18px; }
+  .category-name { font-size: 18px; }
+  .racao-site .section-pad { padding-left: 18px; padding-right: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .racao-site *, .racao-site *::before, .racao-site *::after { animation: none !important; transition: none !important; }
+}
