@@ -1,4 +1,3 @@
-import { publicUrl } from "@/lib/public-url";
 // Replace only with confirmed business details. Never borrow source-site contacts.
 export const business = {
   whatsapp: "",
@@ -10,10 +9,10 @@ export const business = {
 };
 
 export const categories = [
-  { id: "racoes", name: "Rações", image: publicUrl("/site-assets/d217389e38cfb63f.webp"), alt: "Imagem ilustrativa de um cão ao lado de um pote de ração" },
-  { id: "petiscos", name: "Petiscos", image: publicUrl("/site-assets/6c7dd5d2698ad81e.webp"), alt: "Imagem ilustrativa de um cão com um petisco" },
-  { id: "acessorios", name: "Acessórios", image: publicUrl("/site-assets/c182891ccc12c4ac.webp"), alt: "Imagem ilustrativa de um cão usando peitoral e guia" },
-  { id: "cuidados", name: "Higiene e cuidados", image: publicUrl("/site-assets/448d80784de4d293.webp"), alt: "Imagem ilustrativa de um cão de pelo dourado" },
+  { id: "racoes", name: "Rações", image: "/site-assets/d217389e38cfb63f.webp", alt: "Imagem ilustrativa de um cão ao lado de um pote de ração" },
+  { id: "petiscos", name: "Petiscos", image: "/site-assets/6c7dd5d2698ad81e.webp", alt: "Imagem ilustrativa de um cão com um petisco" },
+  { id: "acessorios", name: "Acessórios", image: "/site-assets/c182891ccc12c4ac.webp", alt: "Imagem ilustrativa de um cão usando peitoral e guia" },
+  { id: "cuidados", name: "Higiene e cuidados", image: "/site-assets/448d80784de4d293.webp", alt: "Imagem ilustrativa de um cão de pelo dourado" },
 ] as const;
 
 export type CategoryId = typeof categories[number]["id"];
