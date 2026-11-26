@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { Menu, X, ArrowUp, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { business, categories, products, filterProducts, whatsappDestination, type CategoryId } from "@/lib/racao-content";
-import { publicUrl, withPublicBase } from "@/lib/public-url";
 import capturedCSS from "../styles/site.css?raw";
 import expressCSS from "../styles/racao.css?raw";
 
@@ -52,8 +51,8 @@ function Index() {
   }, [menuOpen]);
 
   return <>
-    <style>{withPublicBase(capturedCSS)}</style>
-    <style>{withPublicBase(expressCSS)}</style>
+    <style>{capturedCSS}</style>
+    <style>{expressCSS}</style>
     <div className="racao-site">
       <a className="skip-link" href="#conteudo">Ir para o conteúdo</a>
       <div className="topline"><span>O universo do seu pet.</span><span>Ração Express</span></div>
@@ -68,7 +67,7 @@ function Index() {
       <main id="conteudo">
         <section className="hero-showcase" aria-labelledby="showcase-title">
           <div className="hero-showcase__heading"><p className="express-eyebrow">Para quem ama de quatro patas</p><h1 id="showcase-title">Ração<br /><span>Express</span><span className="hero-period" aria-hidden="true">.</span></h1></div>
-          <img className="hero-showcase__dog" src={publicUrl("/site-assets/d6ef1513abcf50bc.webp")} alt="Beagle em fotografia ilustrativa, olhando atento para a frente" fetchPriority="high" />
+          <img className="hero-showcase__dog" src="/site-assets/d6ef1513abcf50bc.webp" alt="Beagle em fotografia ilustrativa, olhando atento para a frente" fetchPriority="high" />
           <div className="hero-showcase__copy"><p className="hero-tagline">A alegria do seu pet<br />começa por aqui.</p><p>Um mundo para explorar.<br />Uma rotina com mais carinho.</p><div className="hero-actions"><Button asChild variant="express" size="lg"><a href="#loja">Ver produtos</a></Button><Button asChild variant="editorial"><a href="#como-pedir">Como pedir</a></Button></div></div>
           <span className="hero-photo-caption">Imagem ilustrativa</span>
         </section>
