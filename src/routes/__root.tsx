@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { assetUrl } from "../lib/racao-content";
 
 function NotFoundComponent() {
   return (
@@ -95,7 +96,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", href: assetUrl("favicon.ico"), type: "image/x-icon", sizes: "48x48" },
+      { rel: "icon", href: assetUrl("site-assets/logo-32.png"), type: "image/png", sizes: "32x32" },
+      { rel: "apple-touch-icon", href: assetUrl("site-assets/logo-180.png"), sizes: "180x180" },
     ],
   }),
   shellComponent: RootShell,
