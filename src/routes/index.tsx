@@ -1,299 +1,95 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Menu, X, ArrowUp, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { business, categories, products, filterProducts, whatsappDestination, type CategoryId } from "@/lib/racao-content";
 import capturedCSS from "../styles/site.css?raw";
+import expressCSS from "../styles/racao.css?raw";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
-    { title: "The Dog Shoppe — carinho pertinho de você" },
-    { name: "description", content: "Petshop de vizinhança em Brasília: banho, tosa e boas escolhas para seu pet, com atendimento personalizado na CA 5." },
-    { property: "og:title", content: "The Dog Shoppe — carinho pertinho de você" },
-    { property: "og:description", content: "Banho, tosa e uma loja cheia de boas escolhas para seu pet na CA 5, Brasília." },
+    { title: "Ração Express — a alegria do seu pet começa aqui" },
+    { name: "description", content: "Conheça a Ração Express, explore as categorias de produtos para pets e saiba como consultar disponibilidade pelo canal oficial." },
+    { property: "og:title", content: "Ração Express — a alegria do seu pet começa aqui" },
+    { property: "og:description", content: "Rações, petiscos, acessórios e cuidados: conheça a Ração Express e acompanhe a preparação do catálogo." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
   ] }),
-  staticData: { importedDocument: { html: { "lang": "pt-BR" }, body: {  } } },
+  staticData: { importedDocument: { html: { lang: "pt-BR" }, body: {} } },
   component: Index,
 });
 
+const navigation = [
+  { href: "#loja", label: "Produtos" },
+  { href: "#como-pedir", label: "Como pedir" },
+  { href: "#sobre", label: "Sobre" },
+  { href: "#contato", label: "Contato" },
+];
+
+// Reserved for the client's original image, never a replacement wordmark.
+function OfficialLogoSpace({ large = false }: { large?: boolean }) {
+  return <span className={large ? "official-logo-space official-logo-space--large" : "official-logo-space"}>[LOGO OFICIAL]</span>;
+}
+
 function Index() {
   const [menuOpen, setMenuOpen] = useState(false);
-  return (
-    <>
-      <style>{capturedCSS}</style>
-      <div className="topline items-center justify-center normal-case">
-        <span>A petshop da sua vizinhança</span>
-        <span>Atendimento personalizado</span>
-      </div>
-      <header className="site-header items-center justify-between" id="topo">
-        <a className="brand items-center gap-[10px]" aria-label="The Dog Shoppe, início" href="#topo">
-          <span className="brand__mark place-items-center" aria-hidden="true">
-            <svg viewBox="0 0 48 48" fill="none">
-              <path d="M24 26.2c-4.3 0-9 4.1-9 8.5 0 3.6 3.4 5.2 7.1 4.1 1.2-.4 2.4-.4 3.6 0 3.8 1.1 7.2-.5 7.2-4.1 0-4.4-4.6-8.5-8.9-8.5Z" fill="currentColor" />
-              <ellipse cx="11.4" cy="20.2" rx="4.1" ry="5.6" transform="rotate(-28 11.4 20.2)" fill="currentColor" />
-              <ellipse cx="21.1" cy="14.4" rx="4.1" ry="5.6" transform="rotate(-8 21.1 14.4)" fill="currentColor" />
-              <ellipse cx="31.4" cy="15.7" rx="4.1" ry="5.6" transform="rotate(12 31.4 15.7)" fill="currentColor" />
-              <ellipse cx="39" cy="22.6" rx="4.1" ry="5.6" transform="rotate(33 39 22.6)" fill="currentColor" />
-            </svg>
-          </span>
-          <span className="brand__type">
-            <strong>the dog</strong>
-            <small className="normal-case">SHOPPE · PET &amp; CARE</small>
-          </span>
-        </a>
-        <Button asChild variant="ghost" className="p-0 hover:bg-transparent">
-        <button className="menu-toggle [@media(width_<=_760px)]:items-center [@media(width_<=_760px)]:gap-[6px] [@media(width_<=_760px)]:justify-center" type="button" aria-label={menuOpen ? "Fechar menu" : "Abrir menu"} aria-expanded={menuOpen} aria-controls="main-nav" onClick={() => setMenuOpen(open => !open)}>
-          <span />
-          <span />
-        </button>
-        </Button>
-        <nav className={`main-nav ${menuOpen ? "[@media(width_<=_760px)]:visible [@media(width_<=_760px)]:opacity-100! [@media(width_<=_760px)]:translate-y-0!" : "[@media(width_<=_760px)]:invisible"} [@media(width_<=_760px)]:[backdrop-filter:blur(16px)_saturate(150%)]`} id="main-nav" aria-label="Navegação principal" onClick={(event) => { if (event.target instanceof Element && event.target.closest("a")) setMenuOpen(false); }} onKeyDown={(event) => { if (event.key === "Escape") setMenuOpen(false); }}>
-          <a className="[@media(width_<=_760px)]:items-center" href="#servicos">Banho &amp; tosa</a>
-          <a className="[@media(width_<=_760px)]:items-center" href="#loja">A loja</a>
-          <a className="[@media(width_<=_760px)]:items-center" href="#choose">Por que a Dog Shoppe</a>
-          <a className="[@media(width_<=_760px)]:items-center" href="#contato">Onde estamos</a>
-          <a className="button button--nav items-center gap-[18px] isolate justify-center" href="https://wa.me/5561993351647?text=Ol%C3%A1%21%20Encontrei%20voc%C3%AAs%20pelo%20site." rel="noreferrer" target="_blank">Fale com a gente <span aria-hidden="true">↗</span></a>
+  const [category, setCategory] = useState<CategoryId | "todos">("todos");
+  const menuButton = useRef<HTMLButtonElement>(null);
+  const contactHref = whatsappDestination(business.whatsapp);
+  const visibleProducts = filterProducts(products, category);
+  const selectedCategory = categories.find(item => item.id === category);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setMenuOpen(false); menuButton.current?.focus(); }
+    };
+    const onResize = () => { if (window.innerWidth > 760) setMenuOpen(false); };
+    document.addEventListener("keydown", onKey);
+    window.addEventListener("resize", onResize);
+    return () => { document.removeEventListener("keydown", onKey); window.removeEventListener("resize", onResize); };
+  }, [menuOpen]);
+
+  return <>
+    <style>{capturedCSS}</style>
+    <style>{expressCSS}</style>
+    <div className="racao-site">
+      <a className="skip-link" href="#conteudo">Ir para o conteúdo</a>
+      <div className="topline"><span>O universo do seu pet.</span><span>Ração Express</span></div>
+      <header className="site-header" id="topo">
+        <a href="#topo" className="brand" aria-label="Ração Express, início"><OfficialLogoSpace /></a>
+        <Button variant="ghost" size="icon" ref={menuButton} className="express-menu" aria-label={menuOpen ? "Fechar menu" : "Abrir menu"} aria-expanded={menuOpen} aria-controls="main-nav" onClick={() => setMenuOpen(open => !open)}>{menuOpen ? <X /> : <Menu />}</Button>
+        <nav id="main-nav" className={`main-nav${menuOpen ? " main-nav--open" : ""}`} aria-label="Navegação principal">
+          {navigation.map(item => <Button asChild variant="ghost" className="nav-link" key={item.href}><a href={item.href} onClick={() => setMenuOpen(false)}>{item.label}</a></Button>)}
+          <Button asChild variant="express" className="nav-cta"><a href="#loja" onClick={() => setMenuOpen(false)}>Ver produtos</a></Button>
         </nav>
       </header>
-      <main>
-        <section className="hero-showcase isolate" aria-labelledby="showcase-title">
-          <h1 className="hero-showcase__word [text-shadow:rgba(24,61,45,0.035)_0px_8px]" id="showcase-title">The Dog</h1>
-          <img className="hero-showcase__dog object-contain [object-position:center_bottom]" src="/site-assets/d6ef1513abcf50bc.webp" alt="Cão atento olhando à frente, em primeiro plano" fetchPriority="high" />
+      <main id="conteudo">
+        <section className="hero-showcase" aria-labelledby="showcase-title">
+          <div className="hero-showcase__heading"><p className="express-eyebrow">Para quem ama de quatro patas</p><h1 id="showcase-title">Ração<br /><span>Express</span><span className="hero-period" aria-hidden="true">.</span></h1></div>
+          <img className="hero-showcase__dog" src="/site-assets/d6ef1513abcf50bc.webp" alt="Beagle em fotografia ilustrativa, olhando atento para a frente" fetchPriority="high" />
+          <div className="hero-showcase__copy"><p className="hero-tagline">A alegria do seu pet<br />começa por aqui.</p><p>Um mundo para explorar.<br />Uma rotina com mais carinho.</p><div className="hero-actions"><Button asChild variant="express" size="lg"><a href="#loja">Ver produtos</a></Button><Button asChild variant="editorial"><a href="#como-pedir">Como pedir</a></Button></div></div>
+          <span className="hero-photo-caption">Imagem ilustrativa</span>
         </section>
-        <section className="hero hero--below grid-cols-[1.03fr_0.97fr]" id="welcome" aria-labelledby="welcome-title">
-          <div className="hero__copy">
-            <h2 className="hero__title" id="welcome-title">O cuidado que seu pet merece, <em>bem pertinho.</em></h2>
-            <p className="hero__lead">Banho, tosa e uma loja cheia de boas escolhas — com aquele atendimento atencioso que faz toda a diferença.</p>
-            <div className="hero__actions items-center">
-              <a className="button button--primary items-center gap-[18px] isolate justify-center" href="https://wa.me/5561993351647?text=Ol%C3%A1%21%20Quero%20conhecer%20a%20The%20Dog%20Shoppe." rel="noreferrer" target="_blank">Chamar no WhatsApp <span aria-hidden="true">↗</span></a>
-              <a className={"\x74ext-link items-center gap-[9px] isolate"} href="#servicos">Conheça a loja <span aria-hidden="true">↓</span></a>
-            </div>
-          </div>
-          <div className="hero__visual">
-            <div className="hero__image-wrap">
-              <img className="object-cover" src="/site-assets/edd6f09b6a0777ae.jpg" alt="Cão simpático em um ambiente acolhedor de petshop" loading="lazy" />
-            </div>
-            <div className="hero__caption items-center [gap:0px]"> Cuidado de pertinho, com carinho de verdade</div>
-          </div>
-          <div className="hero__bottom justify-between normal-case [@media(width_<=_760px)]:gap-[12px]">
-            <span>Boas-vindas à The Dog Shoppe</span>
-            <span>CA 5 · Brasília <span aria-hidden="true">↘</span></span>
-          </div>
+        <section className="promise-band" aria-label="Informações a confirmar"><span>[REGIÃO DE ATENDIMENTO]</span><span>[CONDIÇÃO DE ENTREGA A CONFIRMAR]</span><span>[DIFERENCIAL A CONFIRMAR]</span></section>
+        <section className="choose section-pad" id="loja" aria-labelledby="shop-title">
+          <div className="choose__heading"><div><p className="express-eyebrow">01 / O universo pet</p><h2 id="shop-title">Cada necessidade.<br /><em>Um novo achado.</em></h2></div><p>Explore as categorias.<br />Produtos e disponibilidade<br />a confirmar no catálogo oficial.</p></div>
+          <div className="express-categories">{categories.map((item, index) => <article className={`express-category express-category--${item.id}`} key={item.id}><Button asChild variant="category" className="category-action"><a href="#destaques" onClick={() => setCategory(item.id)}><span className="category-index">0{index + 1}</span><img src={item.image} alt={item.alt} loading="lazy" /><span className="category-name">{item.name}</span><span className="category-caption">Categoria a confirmar</span></a></Button></article>)}</div>
         </section>
-        <section className="promise-band items-center" aria-label="O que você encontra na The Dog Shoppe">
-          <div className="promise-band__item items-center">
-            <span>Petshop de bairro</span>
-          </div>
-          <div className="promise-band__item items-center">
-            <span>Atendimento personalizado</span>
-          </div>
-          <div className="promise-band__item items-center">
-            <span>Banho &amp; tosa</span>
-          </div>
+        <section className="catalog section-pad" id="destaques" aria-labelledby="catalog-title">
+          <div className="catalog-heading"><div><p className="express-eyebrow">02 / Para conhecer melhor</p><h2 id="catalog-title">Os próximos<br /><em>favoritos.</em></h2></div><p>O catálogo está em preparação.<br />Sem produtos, preços ou estoque confirmados.</p></div>
+          <div className="catalog-filters" role="group" aria-label="Filtrar categorias"><Button variant={category === "todos" ? "express" : "ghost"} aria-pressed={category === "todos"} onClick={() => setCategory("todos")}>Todas</Button>{categories.map(item => <Button key={item.id} variant={category === item.id ? "express" : "ghost"} aria-pressed={category === item.id} onClick={() => setCategory(item.id)}>{item.name}</Button>)}</div>
+          <p className="catalog-state" aria-live="polite">{selectedCategory ? `${selectedCategory.name}: produtos a confirmar` : "Todos os produtos: informações a confirmar"}</p>
+          {visibleProducts.length > 0 ? <div className="product-grid">{visibleProducts.map(product => <article className="product-slot" key={product.id}><img src={product.image} alt={product.name} loading="lazy" /><h3>{product.name}</h3><p>{product.description}</p><p>{product.price}</p></article>)}</div> : <div className="product-grid">{[1, 2, 3].map(slot => <article className="product-slot" key={slot}><div className="product-image-space"><ImageIcon aria-hidden="true" /><span>[FOTO DO PRODUTO]</span></div><p className="slot-label">Conteúdo a confirmar / 0{slot}</p><h3>[PRODUTO]</h3><p>[DESCRIÇÃO]</p><p className="product-price">[PREÇO]</p></article>)}</div>}
         </section>
-        <section className="choose section-pad" id="choose" aria-labelledby="choose-title">
-          <div className="choose__heading items-end gap-[32px] justify-between">
-            <div>
-              <p className="eyebrow items-center gap-[9px] normal-case"> De pertinho, com carinho</p>
-              <h2 id="choose-title">Por que escolher<br /><em>a gente?</em></h2>
-            </div>
-            <p>Um lugar de bairro, um atendimento atencioso e cuidado pensado para fazer parte da rotina de vocês.</p>
-          </div>
-          <div className="choose__grid">
-            <article className="choose-card choose-card--love isolate">
-              <span className="choose-card__eyebrow normal-case">01 / Todo dia</span>
-              <h3 className="normal-case">Carinho<br />em cada<br />atendimento</h3>
-              <p>Um jeito próximo e personalizado de receber você e seu pet.</p>
-              <img className="object-contain object-bottom-right" src="/site-assets/df4dd4815182ea3d.webp" alt="Cão corgi sorridente representando um atendimento acolhedor" loading="lazy" />
-            </article>
-            <article className="choose-card choose-card--care isolate">
-              <span className="choose-card__eyebrow normal-case">02 / Um momento só dele</span>
-              <h3 className="normal-case">Banho &amp;<br />tosa com<br />cuidado</h3>
-              <p>Um cuidado caprichado para seu pet se sentir bem.</p>
-              <img className="object-contain object-bottom-right" src="/site-assets/448d80784de4d293.webp" alt="Retrato de um cão de pelo dourado associado ao banho e tosa" loading="lazy" />
-            </article>
-            <article className="choose-card choose-card--shop isolate">
-              <span className="choose-card__eyebrow normal-case">03 / A loja da vizinhança</span>
-              <h3 className="normal-case">Boas escolhas<br />pra rotina<br />pet</h3>
-              <p>Uma conversa com a gente ajuda a encontrar o que você procura.</p>
-              <img className="object-contain object-bottom-right" src="/site-assets/d6ef1513abcf50bc.webp" alt="Beagle olhando à frente em um recorte para o card da loja pet" loading="lazy" />
-            </article>
-          </div>
-        </section>
-        <section className="care section-pad" id="servicos" aria-labelledby="care-title">
-          <div className="section-heading section-heading--split items-end gap-[30px] justify-between">
-            <div>
-              <p className="eyebrow items-center gap-[9px] normal-case"> Um momento só dele</p>
-              <h2 id="care-title">Dia de se cuidar.<br /><em>Dia de brilhar.</em></h2>
-            </div>
-            <p className="section-heading__text">Um banho gostoso, um cuidado caprichado e o tempo que cada pet precisa. Converse com a nossa equipe para saber mais sobre banho e tosa.</p>
-          </div>
-          <div className="care-card">
-            <div className="care-card__photo">
-              <img className="object-cover [object-position:center_48%]" src="/site-assets/46af3863455e692f.jpg" alt="Cão recebendo escovação delicada durante os cuidados de higiene" loading="lazy" />
-              <span className="care-card__photo-tag">Cuidado sem pressa</span>
-            </div>
-            <div className="care-card__content">
-              <div className="care-card__number normal-case">01 <span>—</span> Cuidado</div>
-              <h3>Um cuidado<br />que começa<br /><em>na confiança.</em></h3>
-              <p>Banho e tosa com atenção aos detalhes e um jeitinho acolhedor. Porque cada pet é único — e merece ser tratado assim.</p>
-              <a className="button button--dark items-center gap-[18px] isolate justify-center" href="https://wa.me/5561993351647?text=Ol%C3%A1%21%20Quero%20saber%20mais%20sobre%20banho%20e%20tosa." rel="noreferrer" target="_blank">Pergunte pra gente <span aria-hidden="true">↗</span></a>
-            </div>
-          </div>
-        </section>
-        <ImportedSectionALojaQueTemum />
-        <section className="about section-pad items-center" id="sobre" aria-labelledby="about-title">
-          <div className="about__visual">
-            <div className="about__photo">
-              <img className="object-cover [object-position:63%_center]" src="/site-assets/ad19fd96991d14e2.jpg" alt="Cão sendo recebido com carinho em uma loja pet" loading="lazy" />
-            </div>
-          </div>
-          <div className="about__copy">
-            <p className="eyebrow items-center gap-[9px] normal-case"> A gente acredita</p>
-            <h2 id="about-title">Pet feliz.<br /><em>Tutor tranquilo.</em></h2>
-            <p className="about__lead">A The Dog Shoppe é aquele lugar pertinho de casa onde seu pet é recebido com cuidado — e você, com toda a atenção.</p>
-            <div className="about-points">
-              <div className="about-point">
-                <span className="about-point__icon place-items-center" aria-hidden="true">01</span>
-                <div>
-                  <h3>De vizinho pra vizinho</h3>
-                  <p>Proximidade e praticidade para fazer parte da rotina de quem mora por aqui.</p>
-                </div>
-              </div>
-              <div className="about-point">
-                <span className="about-point__icon place-items-center" aria-hidden="true">02</span>
-                <div>
-                  <h3>Atendimento de verdade</h3>
-                  <p>Uma conversa atenciosa para entender o que você e seu pet estão procurando.</p>
-                </div>
-              </div>
-              <div className="about-point">
-                <span className="about-point__icon place-items-center" aria-hidden="true">03</span>
-                <div>
-                  <h3>Um cantinho pet</h3>
-                  <p>Cuidados e boas escolhas para acompanhar todas as fases e passeios.</p>
-                </div>
-              </div>
-            </div>
-            <a className={"\x74ext-link text-link--green items-center gap-[9px] isolate"} href="https://www.instagram.com/thedog.shoppe/" rel="noreferrer" target="_blank">Acompanhe no Instagram <span aria-hidden="true">↗</span></a>
-          </div>
-        </section>
-        <ImportedSectionPassaAquiVaiSer />
+        <section className="care section-pad" id="como-pedir" aria-labelledby="order-title"><div className="order-heading"><p className="express-eyebrow">03 / Do seu jeito</p><h2 id="order-title">Escolha com calma.<br /><em>Peça com confiança.</em></h2></div><ol className="order-steps"><li><span className="step-number">01</span><h3>Escolha os produtos</h3><p>Explore o catálogo quando os produtos oficiais estiverem disponíveis.</p></li><li><span className="step-number">02</span><h3>Consulte os detalhes</h3><p>Confirme disponibilidade e condições de entrega pelo canal oficial.</p></li><li><span className="step-number">03</span><h3>Confirme seu pedido</h3><p>Combine os detalhes com a equipe antes de confirmar pelo canal oficial.</p></li></ol><div className="order-footnote"><span>Canal oficial: {business.whatsapp || "[WHATSAPP A CONFIRMAR]"}</span><Button asChild variant="editorial"><a href="#contato">Informações de contato</a></Button></div></section>
+        <section className="about section-pad" id="sobre" aria-labelledby="about-title"><div className="about__visual"><OfficialLogoSpace large /></div><div className="about__copy"><p className="express-eyebrow">04 / Prazer, Ração Express</p><h2 id="about-title">De pet para pet.<br /><em>De gente para gente.</em></h2><p className="about__lead">A alegria do seu pet é o ponto de partida.</p><p className="brand-presentation">{business.presentation}</p><Button asChild variant="editorial"><a href="#loja">Explore as categorias</a></Button></div></section>
+        <section className="visit section-pad" id="contato" aria-labelledby="visit-title"><div className="visit__copy"><p className="express-eyebrow">05 / Vamos conversar</p><h2 id="visit-title">Seu pet merece<br /><em>essa atenção.</em></h2><p>Os contatos e as condições de atendimento serão informados aqui assim que confirmados.</p><Button asChild variant="express" size="lg"><a href={contactHref || "#loja"}>{contactHref ? "Conversar no WhatsApp" : "Ver categorias"}</a></Button></div><dl className="visit__details"><div><dt>WhatsApp</dt><dd>{contactHref ? <a href={contactHref} target="_blank" rel="noreferrer">{business.whatsapp}</a> : "[WHATSAPP]"}</dd></div><div><dt>Endereço / região</dt><dd>{business.address || "[ENDEREÇO]"}<br />{business.region || "[CIDADE/REGIÃO]"}</dd></div><div><dt>Horário de atendimento</dt><dd>{business.hours || "[HORÁRIO]"}</dd></div><div><dt>Instagram</dt><dd>{business.instagram || "[INSTAGRAM]"}</dd></div><div className="delivery-detail"><dt>Condições de entrega</dt><dd>[CONDIÇÃO DE ENTREGA]</dd></div></dl></section>
       </main>
-      <footer className="footer items-center grid-cols-[1fr_1fr]">
-        <a className="brand brand--footer items-center gap-[10px]" href="#topo">
-          <span className="brand__mark place-items-center" aria-hidden="true">
-            <svg viewBox="0 0 48 48" fill="none">
-              <path d="M24 26.2c-4.3 0-9 4.1-9 8.5 0 3.6 3.4 5.2 7.1 4.1 1.2-.4 2.4-.4 3.6 0 3.8 1.1 7.2-.5 7.2-4.1 0-4.4-4.6-8.5-8.9-8.5Z" fill="currentColor" />
-              <ellipse cx="11.4" cy="20.2" rx="4.1" ry="5.6" transform="rotate(-28 11.4 20.2)" fill="currentColor" />
-              <ellipse cx="21.1" cy="14.4" rx="4.1" ry="5.6" transform="rotate(-8 21.1 14.4)" fill="currentColor" />
-              <ellipse cx="31.4" cy="15.7" rx="4.1" ry="5.6" transform="rotate(12 31.4 15.7)" fill="currentColor" />
-              <ellipse cx="39" cy="22.6" rx="4.1" ry="5.6" transform="rotate(33 39 22.6)" fill="currentColor" />
-            </svg>
-          </span>
-          <span className="brand__type">
-            <strong>the dog</strong>
-            <small className="normal-case">SHOPPE · PET &amp; CARE</small>
-          </span>
-        </a>
-        <p className="footer__signoff">Feito com carinho<br />pra quem ama de montão.</p>
-        <div className="footer__bottom justify-between normal-case [grid-column:1/-1]">
-          <span>© 2026 The Dog Shoppe</span>
-          <span>Petshop de vizinhança · Brasília, DF</span>
-          <a href="#topo">Voltar ao topo ↑</a>
-        </div>
-      </footer>
-      <a className="whatsapp-float items-center gap-[9px] isolate [backdrop-filter:blur(14px)_saturate(160%)]" aria-label="Fale com a The Dog Shoppe pelo WhatsApp" href="https://wa.me/5561993351647?text=Ol%C3%A1%21%20Encontrei%20voc%C3%AAs%20pelo%20site." rel="noreferrer" target="_blank">
-        <svg className="whatsapp-float__logo" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...({ focusable: "false" } as any)}>
-          <path d="M20.52 3.48A11.84 11.84 0 0 0 12.04 0C5.46 0 .1 5.35.1 11.93c0 2.1.55 4.15 1.59 5.96L0 24l6.26-1.64a11.96 11.96 0 0 0 5.78 1.47h.01c6.58 0 11.94-5.35 11.95-11.93a11.86 11.86 0 0 0-3.48-8.42ZM12.05 21.82a9.9 9.9 0 0 1-5.04-1.38l-.36-.21-3.71.97.99-3.62-.24-.37a9.87 9.87 0 0 1-1.52-5.28c0-5.47 4.45-9.91 9.89-9.91 2.65 0 5.14 1.03 7.01 2.91a9.86 9.86 0 0 1 2.9 7.02c0 5.46-4.45 9.87-9.92 9.87Zm5.44-7.4c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.67-2.07-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.91-2.2-.24-.58-.48-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.87 1.22 3.07c.15.2 2.1 3.21 5.09 4.5.71.31 1.27.49 1.7.63.72.23 1.38.2 1.9.12.58-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35Z" />
-        </svg>
-        <span>WhatsApp</span>
-      </a>
-      <ImportedAsideEditWithLovable />
-    </>
-  );
-}
-
-function ImportedSectionALojaQueTemum() {
-  return (
-    <section className="shop items-center" id="loja" aria-labelledby="shop-title">
-      <div className="shop__intro">
-        <p className="eyebrow eyebrow--light items-center gap-[9px] justify-center normal-case"> Achadinhos de quatro patas</p>
-        <h2 id="shop-title">A loja que tem<br />um pouco de <em>tudo</em><br />que é bom.</h2>
-        <p>Uma seleção para acompanhar a rotina, o passeio e os momentos gostosos do seu pet.</p>
-      </div>
-      <div className="shop__categories items-start" aria-label="Categorias de produtos">
-        <article className="category-card category-card--food aspect-square isolate">
-          <img className="category-card__photo object-contain [object-position:center_bottom]" src="/site-assets/d217389e38cfb63f.webp" alt="Cão ao lado de um pote de ração, imagem ilustrativa da categoria alimentação" loading="lazy" />
-          <div className="category-card__copy">
-            <h3 className="uppercase">Alimentação</h3>
-            <p>Escolhas para a rotina</p>
-          </div>
-        </article>
-        <article className="category-card category-card--treat aspect-square isolate">
-          <img className="category-card__photo object-contain [object-position:center_bottom]" src="/site-assets/6c7dd5d2698ad81e.webp" alt="Cão com um petisco, imagem ilustrativa da categoria petiscos" loading="lazy" />
-          <div className="category-card__copy">
-            <h3 className="uppercase">Petiscos</h3>
-            <p>Pequenos mimos do dia</p>
-          </div>
-        </article>
-        <article className="category-card category-card--play aspect-square isolate">
-          <img className="category-card__photo object-contain [object-position:center_bottom]" src="/site-assets/bff9d7c9dc09d6ec.webp" alt="Cão com um brinquedo de bola, imagem ilustrativa da categoria brinquedos" loading="lazy" />
-          <div className="category-card__copy">
-            <h3 className="uppercase">Brinquedos</h3>
-            <p>Diversão que movimenta</p>
-          </div>
-        </article>
-        <article className="category-card category-card--walk aspect-square isolate">
-          <img className="category-card__photo object-contain [object-position:center_bottom]" src="/site-assets/c182891ccc12c4ac.webp" alt="Cão usando peitoral e guia, imagem ilustrativa da categoria acessórios" loading="lazy" />
-          <div className="category-card__copy">
-            <h3 className="uppercase">Acessórios</h3>
-            <p>Prontos pro passeio</p>
-          </div>
-        </article>
-      </div>
-      <a className="button button--cream shop__cta items-center gap-[18px] isolate justify-center" href="https://wa.me/5561993351647?text=Ol%C3%A1%21%20Quero%20conhecer%20os%20produtos%20da%20loja." rel="noreferrer" target="_blank">Pergunte o que tem na loja <span aria-hidden="true">↗</span></a>
-    </section>
-  );
-}
-
-function ImportedSectionPassaAquiVaiSer() {
-  return (
-    <section className="visit items-center" id="contato" aria-labelledby="visit-title">
-      <div className="visit__copy">
-        <p className="eyebrow eyebrow--light items-center gap-[9px] normal-case"> Estamos por aqui</p>
-        <h2 id="visit-title">Passa aqui.<br /><em>Vai ser bom te ver.</em></h2>
-        <p>Quer tirar uma dúvida sobre a loja, banho ou tosa? Manda uma mensagem — a gente conversa.</p>
-        <a className="button button--cream items-center gap-[18px] isolate justify-center" href="https://wa.me/5561993351647?text=Ol%C3%A1%21%20Encontrei%20voc%C3%AAs%20pelo%20site." rel="noreferrer" target="_blank">Conversar no WhatsApp <span aria-hidden="true">↗</span></a>
-      </div>
-      <div className="visit__details">
-        <div className="visit-detail [backdrop-filter:blur(4px)] [@media(width_<=_760px)]:items-center [@media(width_<=_760px)]:grid-cols-[40px_1fr]">
-          <span className="visit-detail__icon place-items-center [@media(width_<=_760px)]:[grid-row:1/4]" aria-hidden="true">⌖</span>
-          <div>
-            <span className="visit-detail__label normal-case">Nosso cantinho</span>
-            <p>CA 5, Bloco I,<br />lojas 107 e 108</p>
-            <span className="visit-detail__sub">Brasília · DF</span>
-          </div>
-        </div>
-        <div className="visit-detail [backdrop-filter:blur(4px)] [@media(width_<=_760px)]:items-center [@media(width_<=_760px)]:grid-cols-[40px_1fr]">
-          <span className="visit-detail__icon place-items-center [@media(width_<=_760px)]:[grid-row:1/4]" aria-hidden="true">↗</span>
-          <div>
-            <span className="visit-detail__label normal-case">Manda um oi</span>
-            <a href="https://wa.me/5561993351647" rel="noreferrer" target="_blank">(61) 99335-1647</a>
-            <span className="visit-detail__sub">WhatsApp</span>
-          </div>
-        </div>
-        <div className="visit-detail [backdrop-filter:blur(4px)] [@media(width_<=_760px)]:items-center [@media(width_<=_760px)]:grid-cols-[40px_1fr]">
-          <span className="visit-detail__icon place-items-center [@media(width_<=_760px)]:[grid-row:1/4]" aria-hidden="true">◎</span>
-          <div>
-            <span className="visit-detail__label normal-case">Segue a gente</span>
-            <a href="https://www.instagram.com/thedog.shoppe/" rel="noreferrer" target="_blank">@thedog.shoppe</a>
-            <span className="visit-detail__sub">Instagram</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+      <footer className="footer"><div className="footer-top"><OfficialLogoSpace /><p>Para quem faz do carinho<br />parte da rotina.</p><nav aria-label="Navegação do rodapé">{navigation.map(item => <Button key={item.href} asChild variant="ghost"><a href={item.href}>{item.label}</a></Button>)}</nav></div><div className="footer-legal"><details><summary>Termos</summary><p>[TERMOS A CONFIRMAR]</p></details><details><summary>Política de privacidade</summary><p>[POLÍTICA DE PRIVACIDADE A CONFIRMAR]</p></details><span>© 2026 Ração Express</span><Button asChild variant="ghost" size="icon"><a href="#topo" aria-label="Voltar ao topo" title="Voltar ao topo"><ArrowUp /></a></Button></div></footer>
+    </div>
+    <ImportedAsideEditWithLovable />
+  </>;
 }
 
 function ImportedAsideEditWithLovable() {
