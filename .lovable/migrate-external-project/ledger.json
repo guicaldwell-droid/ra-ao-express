@@ -1,0 +1,9 @@
+{
+  "source": "https://manus-to-maker-journey.lovable.app",
+  "capabilities": [
+    {"capability":"page and assets","source":"published site","outcome":"capture as React with local media","status":"verified","next_action":null},
+    {"capability":"navigation and contact links","source":"anchor links, WhatsApp, Instagram","outcome":"destinations preserved; phone menu opens, navigates to store and closes","status":"verified","next_action":null},
+    {"capability":"database, records, auth, authorization, storage, providers, endpoints, callbacks, webhooks, schedules, secrets","source":"published static page inspection","outcome":"none detected; external contact links only","status":"not applicable","next_action":null},
+    {"capability":"cutover","source":"unpublished target","outcome":"preview available","status":"pending","next_action":"publish when ready"}
+  ]
+}
